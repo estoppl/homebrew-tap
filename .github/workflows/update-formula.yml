@@ -1,0 +1,75 @@
+name: Update Formula
+
+on:
+  repository_dispatch:
+    types: [update-formula]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update formula
+        run: |
+          VERSION="${{ github.event.client_payload.version }}"
+          DARWIN_ARM="${{ github.event.client_payload.darwin_aarch64_sha256 }}"
+          DARWIN_X86="${{ github.event.client_payload.darwin_x86_64_sha256 }}"
+          LINUX_ARM="${{ github.event.client_payload.linux_aarch64_sha256 }}"
+          LINUX_X86="${{ github.event.client_payload.linux_x86_64_sha256 }}"
+
+          cat > Formula/estoppl.rb << RUBY
+          class Estoppl < Formula
+            desc "Compliance proxy for AI agent tool calls (MCP)"
+            homepage "https://github.com/estoppl/estoppl"
+            version "${VERSION}"
+            license "Apache-2.0"
+
+            on_macos do
+              on_arm do
+                url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-darwin-aarch64.tar.gz"
+                sha256 "${DARWIN_ARM}"
+                def install
+                  bin.install "estoppl-darwin-aarch64" => "estoppl"
+                end
+              end
+              on_intel do
+                url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-darwin-x86_64.tar.gz"
+                sha256 "${DARWIN_X86}"
+                def install
+                  bin.install "estoppl-darwin-x86_64" => "estoppl"
+                end
+              end
+            end
+
+            on_linux do
+              on_arm do
+                url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-linux-aarch64.tar.gz"
+                sha256 "${LINUX_ARM}"
+                def install
+                  bin.install "estoppl-linux-aarch64" => "estoppl"
+                end
+              end
+              on_intel do
+                url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-linux-x86_64.tar.gz"
+                sha256 "${LINUX_X86}"
+                def install
+                  bin.install "estoppl-linux-x86_64" => "estoppl"
+                end
+              end
+            end
+
+            test do
+              assert_match "estoppl", shell_output("#{bin}/estoppl --help")
+            end
+          end
+          RUBY
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/estoppl.rb
+          git diff --staged --quiet && exit 0
+          git commit -m "Update estoppl to v${{ github.event.client_payload.version }}"
+          git push
