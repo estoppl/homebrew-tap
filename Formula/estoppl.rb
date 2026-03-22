@@ -1,20 +1,20 @@
 class Estoppl < Formula
   desc "Compliance proxy for AI agent tool calls (MCP)"
   homepage "https://github.com/estoppl/estoppl"
-  version "0.18.0"
+  version "0.19.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
       url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-darwin-aarch64.tar.gz"
-      sha256 "ae1b524b8423de6d2610a3766a8eebdbf0364937cb907781b1025c6c0397bfd7"
+      sha256 "0ef0b8511fd3450b2f1f1af4c26be1f0b7209f57b7ddbc79a3693c64e08c92e0"
       def install
         bin.install "estoppl-darwin-aarch64" => "estoppl"
       end
     end
     on_intel do
       url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-darwin-x86_64.tar.gz"
-      sha256 "c80f62286f232be9523feaece8945dcca47306224e6a9a323ed8bf22bff0cfaa"
+      sha256 "ef91b8c87432b7f19a6708b1af9d707d087a10956067d2dc654ad4859eca5e4b"
       def install
         bin.install "estoppl-darwin-x86_64" => "estoppl"
       end
@@ -24,14 +24,14 @@ class Estoppl < Formula
   on_linux do
     on_arm do
       url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-linux-aarch64.tar.gz"
-      sha256 "71c382b56e930efcae796981108cdccf0cc72ff7332e2e61d72e13b56963e54b"
+      sha256 "296ac9e5ebe240af8c28dcc6f7b6f6a81a62fe573f313105c06d7c0068165a06"
       def install
         bin.install "estoppl-linux-aarch64" => "estoppl"
       end
     end
     on_intel do
       url "https://github.com/estoppl/estoppl/releases/download/v#{version}/estoppl-linux-x86_64.tar.gz"
-      sha256 "480a912ac486a84abec609340f542bb4f1668f95e127aabd5f2f8e0883d2ac61"
+      sha256 "0c6b8aff61866f10a99c3f42435667f18c30bd6fa71511144a7e7e3376e4dd8e"
       def install
         bin.install "estoppl-linux-x86_64" => "estoppl"
       end
